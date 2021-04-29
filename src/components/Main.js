@@ -2,7 +2,7 @@ import React from 'react'
 
 function Main() {
     return (
-        <div>Hello world!</div>
+        <div>Hello world from Main component!</div>
     )
 }
 

@@ -4,6 +4,7 @@ import Login from './components/Login'
 import Main from './components/Main'
 import './App.less';
 import Header from "./components/Header";
+import RouterGuard from "./helpers/RouterGuard";
 
 function App() {
   return (
@@ -11,15 +12,7 @@ function App() {
           <Header />
           <div className="container" style={{marginTop: '15px'}}>
               <Router>
-                  <Switch>
-                      <Route key={1} path="/login">
-                          <Login />
-                      </Route>
-                      <Route key={1} path="/main">
-                          <Main />
-                      </Route>
-                      <Redirect to='/login'/>
-                  </Switch>
+                  <RouterGuard />
               </Router>
           </div>
       </div>
