@@ -1,22 +1,20 @@
 import React from 'react'
-import {Switch, Route, Redirect, BrowserRouter as Router} from "react-router-dom";
-import Login from './components/Login'
-import Main from './components/Main'
+import { BackTop } from 'antd';
+import {useLocation} from "react-router-dom";
 import './App.less';
 import Header from "./components/Header";
 import RouterGuard from "./helpers/RouterGuard";
 
 function App() {
-  return (
-      <div>
-          <Header />
-          <div className="container" style={{marginTop: '15px'}}>
-              <Router>
-                  <RouterGuard />
-              </Router>
-          </div>
-      </div>
-  );
+    return (
+        <div>
+            <BackTop />
+            {useLocation().pathname !== '/login' ? <Header/> : null}
+            <div className="container" style={{paddingTop: '15px', paddingBottom: '100px'}}>
+                <RouterGuard/>
+            </div>
+        </div>
+    );
 }
 
 export default App;
