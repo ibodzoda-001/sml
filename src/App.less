@@ -1,5 +1,4 @@
 @import '~antd/dist/antd.less';
-@import url('https://fonts.googleapis.com/css2?family=Londrina+Outline&family=Londrina+Solid:wght@100&display=swap');
 
 .site-page-header {
   padding: 25px 0 25px 0;
@@ -8,23 +7,51 @@
   border: 1px solid rgb(235, 237, 240);
 }
 
+.adProfileImages {
+  width: 100%;
+  height: auto;
+}
+
+.cardStyle {
+  width: 350px;
+  border-radius: 5px;
+  box-shadow: 5px 8px 24px 5px rgba(208, 216, 243, 0.6)
+}
+
+.adProfilePrice {
+  background-color: #389e0d;
+  padding: 15px;
+  border-radius: 3px;
+  color: white;
+}
+
+.adProfilePhone {
+  background-color: #FF8C00;
+  padding: 15px;
+  border-radius: 3px;
+  color: white;
+}
+
 // Bootstrap container class
 .container {
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 25px;
+  padding-left: 25px;
   margin-right: auto;
   margin-left: auto;
 }
+
 @media (min-width: 768px) {
   .container {
     width: 750px;
   }
 }
+
 @media (min-width: 992px) {
   .container {
     width: 970px;
   }
 }
+
 @media (min-width: 1200px) {
   .container {
     width: 1170px;

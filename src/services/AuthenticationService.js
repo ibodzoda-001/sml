@@ -1,8 +1,8 @@
-import axios from "axios";
+import Api from '../helpers/Api'
 
 const authenticationService = (function () {
-    function authenticate(login, password, callback) {
-        axios.create().post('/ecology/authenticate', {username: login, password: password}).then(res => {
+    function authenticate(userInfo, callback) {
+        Api().post('/users/login', userInfo).then(res => {
             callback(res.data);
         })
     }

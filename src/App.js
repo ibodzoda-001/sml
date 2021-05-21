@@ -9,7 +9,7 @@ function App() {
     return (
         <div>
             <BackTop />
-            {useLocation().pathname !== '/login' ? <Header/> : null}
+            <Header/>
             <div className="container" style={{paddingTop: '15px', paddingBottom: '100px'}}>
                 <RouterGuard/>
             </div>
