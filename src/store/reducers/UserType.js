@@ -1,4 +1,6 @@
-const userTypeReducer = (state = localStorage.getItem('userType'), action) => {
+const credentials = JSON.parse(localStorage.getItem('credentials'));
+
+const userTypeReducer = (state = credentials !== null ? credentials.userType : null, action) => {
     switch (action.type) {
         case 'administrator':
             return 'administrator'

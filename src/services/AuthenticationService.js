@@ -1,10 +1,13 @@
 import Api from '../helpers/Api'
 
-const authenticationService = (function () {
-    function authenticate(userInfo, callback) {
+const AuthenticationService = (function () {
+    function authenticate(userInfo, success, error) {
         Api().post('/users/login', userInfo).then(res => {
-            callback(res.data);
-        })
+                success(res.data);
+            },
+            err => {
+                error(err.response);
+            })
     }
 
     return {
@@ -12,4 +15,4 @@ const authenticationService = (function () {
     }
 });
 
-export default authenticationService
+export default AuthenticationService

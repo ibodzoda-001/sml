@@ -5,6 +5,7 @@ import Main from "../components/Main";
 import AdsModerationList from "../components/AdsModerationList";
 import AdProfile from "../components/AdProfile";
 import UserCreation from "../components/UserCreation";
+import UserConfirmation from "../components/UserConfirmation";
 import {useDispatch, useSelector} from "react-redux";
 import Actions from '../store/actions'
 
@@ -53,7 +54,8 @@ function UnauthorisedUserRoutes() {
             <Route component={Login} path="/login"/>
             <Route component={Main} path="/main"/>
             <Route component={UserCreation} path="/user-creation"/>
-            <Redirect to='/login'/>
+            <Route component={UserConfirmation} path="/confirmation"/>
+            <Redirect to='/main'/>
         </Switch>
     )
 }

@@ -8,7 +8,7 @@
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
-    "antd": "^4.15.3",
+    "antd": "^4.16.0",
     "axios": "^0.21.1",
     "boostrap": "^2.0.0",
     "craco-less": "^1.17.1",
@@ -44,5 +44,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://broskev.ml"
+  "proxy": "http://193.163.113.104:5555"
 }

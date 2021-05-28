@@ -7,6 +7,7 @@ import {BrowserRouter} from "react-router-dom";
 import {createStore, applyMiddleware, compose} from 'redux'
 import allReducers from "./store/reducers";
 import {Provider} from 'react-redux'
+import axios from "axios";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(allReducers, composeEnhancers(applyMiddleware()))

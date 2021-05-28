@@ -20,14 +20,14 @@ function Header() {
                 <div style={{marginLeft: 'auto'}}>
                     <Dropdown placement="bottomRight" overlay={
                         (<Menu>
-                            <Menu.Item>
+                            <Menu.Item key={1}>
                                 <a onClick={() => {
                                     history.push('/login')
                                 }}>
                                     <LoginOutlined/> Вход
                                 </a>
                             </Menu.Item>
-                            <Menu.Item>
+                            <Menu.Item key={2}>
                                 <a onClick={() => {
                                     history.push('/user-creation')
                                 }}>

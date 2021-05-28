@@ -57,6 +57,7 @@ function UserCreation(callback) {
                     />
                     <Button size={'middle'}
                             type="primary"
+                            htmlType="submit"
                             style={{marginTop: '15px', float: 'right'}}
                             onClick={() => {
                                 createUser();
