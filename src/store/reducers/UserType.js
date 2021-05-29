@@ -6,6 +6,8 @@ const userTypeReducer = (state = credentials !== null ? credentials.userType : n
             return 'administrator'
         case 'user':
             return 'user'
+        case 'remove-user':
+            return null
         default:
             return state
     }

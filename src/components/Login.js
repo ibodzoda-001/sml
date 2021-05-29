@@ -26,7 +26,6 @@ function Login(callback) {
             dispatch(Actions().setSignIn());
             // dispatch({type: response.userType});
             dispatch({type: 'administrator'});
-            // window.location.reload();
         }, (error) => {
             setButtonLoading(false);
             if (error.status === 403 || error.status === 401) {

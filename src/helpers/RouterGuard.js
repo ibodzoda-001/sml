@@ -5,6 +5,7 @@ import Main from "../components/Main";
 import AdsModerationList from "../components/AdsModerationList";
 import AdProfile from "../components/AdProfile";
 import UserCreation from "../components/UserCreation";
+import AdCreation from "../components/AdCreation";
 import UserConfirmation from "../components/UserConfirmation";
 import {useDispatch, useSelector} from "react-redux";
 import Actions from '../store/actions'
@@ -32,6 +33,7 @@ function AdministratorRoutes() {
         <Switch>
             <Route component={Main} path="/main"/>
             <Route exact component={AdsModerationList} path="/ad-moderation"/>
+            <Route component={AdCreation} path="/new-ad"/>
             <Route component={AdProfile} path="/ad/:adId"/>
             <Redirect to='/main'/>
         </Switch>
