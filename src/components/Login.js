@@ -42,9 +42,7 @@ function Login(callback) {
                 <Card bordered={true} className="cardStyle">
                     <h3 style={{textAlign: 'center'}}>Авторизация</h3>
                     <Form
-                        onFinish={() => {
-                            authenticateUser();
-                        }}>
+                        onFinish={authenticateUser}>
                         <Form.Item
                             style={{marginBottom: '15px'}}
                             name="email"

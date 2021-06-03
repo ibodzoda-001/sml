@@ -8,7 +8,7 @@ const AuthorizationService = (function () {
     }
 
     function confirmUser(userCredentials, callback) {
-        Api().post('/signup/code', userCredentials).then(res => {
+        Api().post('/users/signup/code', userCredentials).then(res => {
             callback(res.data);
         })
     }

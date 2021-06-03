@@ -11,8 +11,9 @@ function UserConfirmation() {
     const [isUserConfirmed, setUserConfirmed] = useState(false);
 
     function sendUserConfirmationCode() {
-        const confirmationCode = location.pathname.replace('/confirmation/', '');
-        const confirmationEmail = 'ibodzodaibodullo@gmail.com'
+        const confirmationInfo = location.pathname.replace('/confirmation/', '').split('/');
+        const confirmationEmail = confirmationInfo[0];
+        const confirmationCode = confirmationInfo[1];
         AuthorizationService().confirmUser({email: confirmationEmail, code: confirmationCode}, callback => {
             setUserConfirmed(true);
         })
@@ -34,7 +35,6 @@ function UserConfirmation() {
             : <div style={{textAlign: 'center', paddingTop: '30vh'}}>
                 <Spin size="large"/>
             </div>
-
     )
 }
 
