@@ -31,7 +31,7 @@ function Api() {
     );
 
     const token = userCredentials !== null ? userCredentials.token : '';
-    token ? axiosApi.defaults.headers.common['Authorization'] = 'Bearer ' + token : delete axiosApi.defaults.headers.common['Authorization'];
+    token ? axiosApi.defaults.headers.common['Authorization'] = token : delete axiosApi.defaults.headers.common['Authorization'];
     if (process.env.NODE_ENV === 'production') {
         axiosApi.defaults.headers.common["Access-Control-Allow-Origin"] = "*"
     }

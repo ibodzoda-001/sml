@@ -19,7 +19,7 @@ function Login(callback) {
 
     function authenticateUser() {
         setButtonLoading(true);
-        AuthenticationService().authenticate({username: email, password: password}, (response) => {
+        AuthenticationService().authenticate({email: email, password: password}, (response) => {
             setButtonLoading(false);
             // localStorage.setItem('credentials', JSON.stringify(response));
             localStorage.setItem('credentials', JSON.stringify({id: 1, userType: 'administrator', token: response.token}));

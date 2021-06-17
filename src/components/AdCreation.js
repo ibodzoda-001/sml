@@ -1,148 +1,198 @@
-import React from 'react'
-import {Form, Input, Button, Select, Cascader, Upload, Modal} from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import React, {useEffect, useState} from 'react'
+import {Form, Input, Button, Select, Checkbox, Divider, Cascader, Upload, Modal, notification} from 'antd';
+import {PlusOutlined} from '@ant-design/icons';
+import AdCreationService from "../services/AdCreationService";
+import _ from 'lodash'
+import {useHistory} from "react-router-dom";
 
 const {TextArea} = Input;
 
 function AdCreation() {
     const [form] = Form.useForm();
+    const history = useHistory();
 
-    const options = [
-        {
-            value: 'zhejiang',
-            label: 'Zhejiang',
-            children: [
-                {
-                    value: 'hangzhou',
-                    label: 'Hangzhou',
-                    children: [
-                        {
-                            value: 'xihu',
-                            label: 'West Lake',
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            value: 'jiangsu',
-            label: 'Jiangsu',
-            children: [
-                {
-                    value: 'nanjing',
-                    label: 'Nanjing',
-                    children: [
-                        {
-                            value: 'zhonghuamen',
-                            label: 'Zhong Hua Men',
-                        },
-                    ],
-                },
-            ],
-        },
-    ];
+    const [categories, setCategories] = useState([]);
+    const [mapOfCategories, setMapOfCategories] = useState(new Map());
+    const [mapOfFields, setMapOfFields] = useState(new Map());
+
+
+    const [selectedCategoryInfo, setSelectedCategoryInfo] = useState(null);
+    let [adTitle, setAdTitle] = useState('');
+    let [adBargain, setAdBargain] = useState(false);
+    let [adPrice, setAdPrice] = useState(null);
+    let [adDescription, setAdDescription] = useState('');
+    let [buttonLoading, setButtonLoading] = useState(false);
+
+
+    const [fileList, setFileList] = useState([]);
+    const [uploadedFilesIds, setUploadedFileIds] = useState([]);
     const previewVisible = false;
     const previewImage = '';
     const previewTitle = '';
-    const fileList = [
-        {
-            uid: '-1',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            uid: '-2',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            uid: '-3',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            uid: '-4',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            uid: '-xxx',
-            percent: 50,
-            name: 'image.png',
-            status: 'uploading',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            uid: '-5',
-            name: 'image.png',
-            status: 'error',
-        },
-    ];
-    const uploadButton = (
-        <div>
-            <PlusOutlined />
-            <div style={{ marginTop: 8 }}>Upload</div>
-        </div>
-    );
 
-
-    const onFinish = (values) => {
-        console.log(values);
+    const openNotificationWithIcon = type => {
+        notification[type]({
+            description: 'Ваше объявление успешно создано и отправлено на модерацию.'
+        });
     };
 
-    const onReset = () => {
-        form.resetFields();
-    };
+    function createNewAd() {
+        setButtonLoading(true);
+        const fields = [];
+        for (let [key, value] of mapOfFields) {
+            fields.push({id: key, value: value})
+        }
+        const obj = {
+            categoryID: selectedCategoryInfo.id,
+            title: adTitle,
+            price: adPrice,
+            bargain: adBargain,
+            description: adDescription,
+            pictures: uploadedFilesIds,
+            fields: fields
+        }
+
+        AdCreationService().createNewAd(obj,
+            (response) => {
+                history.push('/main');
+                openNotificationWithIcon('success');
+            }, (error) => {
+
+            })
+    }
+
+    function setCategoriesMap(categories) {
+        categories.forEach((category) => {
+            const mapOfCategoriesDuplicate = mapOfCategories;
+            mapOfCategoriesDuplicate.set(category.value, category);
+            setMapOfCategories(mapOfCategoriesDuplicate);
+            setCategoriesMap(category.children);
+        })
+    }
+
+    function handleImageUpload(files) {
+        const formData = new FormData();
+        formData.append(
+            "picture",
+            files.file,
+            files.file.name
+        );
+        const fileListDuplicate = _.cloneDeep(files.fileList);
+
+        fileListDuplicate[fileListDuplicate.length - 1].status = 'uploading';
+        setFileList(fileListDuplicate);
+        AdCreationService().uploadImage(formData, response => {
+            setUploadedFileIds([response['imageID'], ...uploadedFilesIds]);
+            setFileList(files.fileList);
+        })
+
+    }
+
+    useEffect(() => {
+        AdCreationService().getCategories(
+            (data) => {
+                setCategoriesMap(data.categories);
+                setCategories(data.categories);
+            }, (error) => {
+            })
+    }, []);
 
     return (
         <div style={{display: 'flex'}}>
             <div style={{marginLeft: 'auto', marginRight: 'auto', width: '40vw'}}>
-                <h2>Создание объявления</h2>
-                <Form form={form} name="control-hooks" onFinish={onFinish}>
+                <Form form={form} layout={'vertical'} name="control-hooks" onFinish={createNewAd}>
                     <Form.Item name="category" label="Категория"
                                rules={[{required: true, message: 'Выберите категорию.'}]}>
-                        <Cascader options={options} onChange={() => {
+                        <Cascader options={categories} onChange={(selectedCategoryIds) => {
+                            if (selectedCategoryIds.length !== 0) {
+                                setSelectedCategoryInfo(mapOfCategories.get(selectedCategoryIds[selectedCategoryIds.length - 1]));
+                            } else {
+                                setSelectedCategoryInfo(null);
+                            }
                         }} placeholder="Выберите категорию"/>
                     </Form.Item>
+
+                    {
+                        selectedCategoryInfo !== null ?
+                            <>
+                                {
+                                    selectedCategoryInfo.info.map((categoryInfo, categoryIndex) => {
+                                        return (
+                                            <Form.Item
+                                                key={categoryIndex}
+                                                name={categoryInfo.title}
+                                                rules={[{
+                                                    required: true,
+                                                    message: `Введите ${categoryInfo.title}.`
+                                                }]}>
+                                                <Input addonBefore={categoryInfo.title}
+                                                       placeholder={`Введите ${categoryInfo.title}`}
+                                                       onChange={(event) => {
+                                                           mapOfFields.set(categoryInfo.id, event.target.value);
+                                                           setMapOfFields(mapOfFields);
+                                                       }
+                                                       }/>
+                                            </Form.Item>
+                                        )
+                                    })
+                                }
+                                <Divider/>
+                            </>
+                            : null
+                    }
+
+                    <div style={{display: 'flex'}}>
+                        <Form.Item style={{width: '100%'}} name="price" label="Цена"
+                                   rules={[{required: true, message: 'Введите цену.'}]}>
+                            <Input type="number" placeholder="Введите цену" onChange={(event) => {
+                                setAdPrice(event.target.value)
+                            }}/>
+                        </Form.Item>
+                        <Checkbox onChange={(event) => {
+                            setAdBargain(event.target.checked);
+                        }} style={{marginLeft: '10px', marginTop: '33px'}}>Торг.</Checkbox>
+                    </div>
+
                     <Form.Item name="title" label="Заголовок" rules={[{required: true, message: 'Введите заголовок.'}]}>
-                        <Input placeholder="Введите заголовок"/>
+                        <Input placeholder="Введите заголовок" onChange={(event) => {
+                            setAdTitle(event.target.value);
+                        }}/>
                     </Form.Item>
                     <Form.Item name="description" label="Описание"
                                rules={[{required: true, message: 'Введите описание.'}]}>
-                        <TextArea placeholder="Введите описание" rows={4}/>
+                        <TextArea onChange={(event) => {
+                            setAdDescription(event.target.value);
+                        }} placeholder="Введите описание" rows={4}/>
                     </Form.Item>
-                    <Form.Item name="description" label="Описание"
-                               rules={[{required: true, message: 'Введите описание.'}]}>
-                        <>
-                            <Upload
-                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                listType="picture-card"
-                                fileList={fileList}
-                                onChange={() => {}}
-                            >
-                                {fileList.length >= 8 ? null : uploadButton}
-                            </Upload>
-                            <Modal
-                                visible={previewVisible}
-                                title={previewTitle}
-                                footer={null}
-                                onCancel={() => {}}
-                            >
-                                <img alt="example" style={{width: '100%'}} src={previewImage}/>
-                            </Modal>
-                        </>
-                    </Form.Item>
+
+                    <>
+                        <div style={{marginBottom: '10px'}}>Фотографии</div>
+                        <Upload
+                            listType="picture-card"
+                            fileList={fileList}
+                            onChange={handleImageUpload}
+                            beforeUpload={() => false}>
+                            {fileList.length >= 8 ? null : (
+                                <div>
+                                    <PlusOutlined/>
+                                    <div style={{marginTop: 8}}>Upload</div>
+                                </div>
+                            )}
+                        </Upload>
+                        <Modal
+                            visible={previewVisible}
+                            title={previewTitle}
+                            footer={null}
+                            onCancel={() => {
+                            }}
+                        >
+                            <img alt="example" style={{width: '100%'}} src={previewImage}/>
+                        </Modal>
+                    </>
 
                     <Form.Item style={{textAlign: 'end'}}>
                         <div>
-                            <Button htmlType="button" style={{marginRight: '15px'}} onClick={onReset}>
-                                Очистить
-                            </Button>
-                            <Button type="primary" htmlType="submit">
+                            <Button type="primary" loading={buttonLoading} htmlType="submit">
                                 Создать
                             </Button>
                         </div>
