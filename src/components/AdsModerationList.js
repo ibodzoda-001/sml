@@ -65,7 +65,7 @@ function AdsModerationList() {
                     }}
                     key={itemIndex}
                     actions={[
-                        <IconText icon={EyeOutlined} text="156" key="list-vertical-star-o"/>,
+                        // <IconText icon={EyeOutlined} text="156" key="list-vertical-star-o"/>,
                     ]}
                     extra={
                         item && item.pictures.length !== 0

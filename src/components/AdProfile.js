@@ -32,7 +32,20 @@ function AdProfile() {
                 <div style={{width: '70%'}}>
                     <h1>{profileInfo.title}</h1>
                     <ImageGallery showPlayButton={false} items={images}/>
-                    <p>
+                    <div style={{marginBottom: '20px'}}>
+                        {profileInfo.fields.map((field) => {
+                            return (<div style={{
+                                width: '50%',
+                                fontSize: '19px',
+                                marginTop: '20px',
+                                display: 'inline-block',
+                                backgroundColor: 'white'
+                            }}>
+                                <b style={{color: '#FF8C00',}}>{field.label}:</b> {field.value}
+                            </div>)
+                        })}
+                    </div>
+                    <p style={{fontSize: '18px'}}>
                         {profileInfo.description}
                     </p>
                 </div>
