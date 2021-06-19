@@ -3,7 +3,6 @@ import {Card, Input, Button, Typography, Form} from 'antd'
 import {MailOutlined, LockOutlined, EyeTwoTone, EyeInvisibleOutlined} from '@ant-design/icons';
 import {useDispatch} from "react-redux";
 import {useHistory} from 'react-router-dom';
-import Actions from "../store/actions";
 import AuthenticationService from '../services/AuthenticationService'
 
 const {Text} = Typography;
@@ -21,11 +20,8 @@ function Login(callback) {
         setButtonLoading(true);
         AuthenticationService().authenticate({email: email, password: password}, (response) => {
             setButtonLoading(false);
-            // localStorage.setItem('credentials', JSON.stringify(response));
-            localStorage.setItem('credentials', JSON.stringify({id: 1, userType: 'administrator', token: response.token}));
-            dispatch(Actions().setSignIn());
-            // dispatch({type: response.userType});
-            dispatch({type: 'administrator'});
+            localStorage.setItem('credentials', JSON.stringify(response));
+            dispatch({type: 'SET_USER_CREDENTIALS', data: response});
         }, (error) => {
             setButtonLoading(false);
             if (error.status === 403 || error.status === 401) {

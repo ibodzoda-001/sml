@@ -21,14 +21,14 @@ function UserCreation(callback) {
         });
     };
 
-    const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [buttonLoading, setButtonLoading] = useState(false);
 
     function createUser() {
         setButtonLoading(true);
-        AuthorizationService().createUser({email: email, password: password, name: name}, callback => {
+        AuthorizationService().createUser({email: email, password: password, username: username}, callback => {
             openNotificationWithIcon('success');
             history.push('/main');
             setButtonLoading(false);
@@ -42,13 +42,13 @@ function UserCreation(callback) {
                 <Form onFinish={createUser}>
                     <Form.Item
                         style={{marginBottom: '15px'}}
-                        name="name"
-                        rules={[{required: true, message: 'Введите имя.'}]}>
+                        name="username"
+                        rules={[{required: true, message: 'Введите имя пользователя.'}]}>
                         <Input
                             size={'middle'}
-                            placeholder="Введите имя"
+                            placeholder="Введите имя пользователя"
                             onChange={(event) => {
-                                setName(event.target.value)
+                                setUsername(event.target.value)
                             }}
                             prefix={<UserOutlined/>}/>
                     </Form.Item>

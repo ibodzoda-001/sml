@@ -7,24 +7,21 @@ import AdProfile from "../components/AdProfile";
 import UserCreation from "../components/UserCreation";
 import AdCreation from "../components/AdCreation";
 import UserConfirmation from "../components/UserConfirmation";
-import {useDispatch, useSelector} from "react-redux";
-import Actions from '../store/actions'
+import {useSelector} from "react-redux";
 
 function RouterGuard() {
-    const userType = useSelector(((state) => {
-        return state.userType !== null ? state.userType : 'unauthorized';
+    const userCredentials = useSelector(((state) => {
+        return state.userCredentials;
     }));
-    const dispatch = useDispatch();
-    dispatch(Actions().setSignIn());
 
     const routesByUserType = new Map([
             ['unauthorized', UnauthorisedUserRoutes()],
-            ['administrator', AdministratorRoutes()],
+            ['admin', AdministratorRoutes()],
             ['user', UserRoutes()]
         ])
 
     return (
-        routesByUserType.get(userType)
+        routesByUserType.get(userCredentials === null ? 'unauthorized' : userCredentials.userType)
     )
 }
 

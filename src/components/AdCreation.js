@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Form, Input, Button, Select, Checkbox, Divider, Cascader, Upload, Modal, notification} from 'antd';
+import {Form, Input, Button, Checkbox, Divider, Cascader, Upload, Modal, message} from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
 import AdCreationService from "../services/AdCreationService";
 import _ from 'lodash'
@@ -20,6 +20,7 @@ function AdCreation() {
     let [adTitle, setAdTitle] = useState('');
     let [adBargain, setAdBargain] = useState(false);
     let [adPrice, setAdPrice] = useState(null);
+    let [adPhoneNumber, setAdPhoneNumber] = useState('');
     let [adDescription, setAdDescription] = useState('');
     let [buttonLoading, setButtonLoading] = useState(false);
 
@@ -29,12 +30,6 @@ function AdCreation() {
     const previewVisible = false;
     const previewImage = '';
     const previewTitle = '';
-
-    const openNotificationWithIcon = type => {
-        notification[type]({
-            description: 'Ваше объявление успешно создано и отправлено на модерацию.'
-        });
-    };
 
     function createNewAd() {
         setButtonLoading(true);
@@ -47,6 +42,7 @@ function AdCreation() {
             title: adTitle,
             price: adPrice,
             bargain: adBargain,
+            phoneNumber: adPhoneNumber,
             description: adDescription,
             pictures: uploadedFilesIds,
             fields: fields
@@ -55,7 +51,7 @@ function AdCreation() {
         AdCreationService().createNewAd(obj,
             (response) => {
                 history.push('/main');
-                openNotificationWithIcon('success');
+                message.success('Ваше объявление успешно создано и отправлено на модерацию.');
             }, (error) => {
 
             })
@@ -156,6 +152,12 @@ function AdCreation() {
                     <Form.Item name="title" label="Заголовок" rules={[{required: true, message: 'Введите заголовок.'}]}>
                         <Input placeholder="Введите заголовок" onChange={(event) => {
                             setAdTitle(event.target.value);
+                        }}/>
+                    </Form.Item>
+                    <Form.Item name="phoneNumber" label="Телефон"
+                               rules={[{required: true, message: 'Введите номер телефона.'}]}>
+                        <Input placeholder="Введите номер телефона" onChange={(event) => {
+                            setAdPhoneNumber(event.target.value);
                         }}/>
                     </Form.Item>
                     <Form.Item name="description" label="Описание"

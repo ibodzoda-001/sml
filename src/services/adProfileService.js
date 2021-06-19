@@ -7,8 +7,16 @@ function AdProfileService() {
         })
     }
 
+    function productModeration({productId, status}, success, error) {
+        Api().patch('/products/admin/product', {id: productId, value: status}).then(
+            (response) => {
+                success(response.data);
+            })
+    }
+
     return {
-        getProfileInfoById: getProfileInfoById
+        getProfileInfoById: getProfileInfoById,
+        productModeration: productModeration
     }
 }
 

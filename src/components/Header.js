@@ -1,19 +1,24 @@
 import React from 'react'
-import {Button, Menu, Dropdown, message} from "antd";
-import {UserOutlined, CaretDownOutlined, LoginOutlined, LogoutOutlined, FormOutlined} from '@ant-design/icons';
+import {Button, Menu, Modal, Dropdown, message} from "antd";
+import {
+    UserOutlined,
+    CaretDownOutlined,
+    OrderedListOutlined,
+    LoginOutlined,
+    LogoutOutlined,
+    FormOutlined
+} from '@ant-design/icons';
 import logo from '../logo.png'
 import {useHistory} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
-import Actions from "../store/actions";
 
 function Header() {
     const history = useHistory();
     const dispatch = useDispatch();
 
-    const isLoggedIn = useSelector(((state) => {
-        return state.isLoggedIn;
+    const userCredentials = useSelector(((state) => {
+        return state.userCredentials;
     }));
-    const username = 'Ibodzoda Ibodullo';
 
     return (
         <div className="site-page-header">
@@ -25,7 +30,7 @@ function Header() {
                 <div style={{marginLeft: 'auto'}}>
                     <Button style={{marginRight: '15px'}} size={'middle'} type="primary"
                             onClick={() => {
-                                if (isLoggedIn) {
+                                if (userCredentials !== null) {
                                     history.push('/new-ad')
                                 } else {
                                     message.warning('Авторизуйтесь, чтобы создать объявление.');
@@ -34,14 +39,33 @@ function Header() {
                             }}>Подать объявление</Button>
 
                     {
-                        isLoggedIn
+                        userCredentials !== null
                             ? <Dropdown placement="bottomRight" overlay={
                                 (<Menu>
-                                    <Menu.Item key={1}>
+                                    {
+                                        userCredentials && userCredentials.userType === 'admin'
+                                            ? <Menu.Item key={1}>
+                                                <a onClick={() => {
+                                                    history.push('/ad-moderation')
+                                                }}>
+                                                    <OrderedListOutlined/> Модерация
+                                                </a>
+                                            </Menu.Item>
+                                            : null
+                                    }
+                                    <Menu.Item key={2}>
                                         <a onClick={() => {
-                                            localStorage.removeItem('credentials');
-                                            dispatch(Actions().setSignIn());
-                                            dispatch({type: 'remove-user'});
+                                            Modal.confirm({
+                                                title: 'Подтверждение',
+                                                icon: <LogoutOutlined/>,
+                                                content: 'Вы действительно хотите выйти?',
+                                                okText: 'Да',
+                                                cancelText: 'Нет',
+                                                onOk: function () {
+                                                    localStorage.removeItem('credentials');
+                                                    dispatch({type: 'REMOVE_USER_CREDENTIALS'});
+                                                }
+                                            });
                                         }}>
                                             <LogoutOutlined/> Выйти
                                         </a>
@@ -50,7 +74,7 @@ function Header() {
                             }>
                                 <Button type="link">
                                     <UserOutlined/>&nbsp;
-                                    {username}
+                                    {userCredentials.username}
                                     <CaretDownOutlined/>
                                 </Button>
                             </Dropdown>
