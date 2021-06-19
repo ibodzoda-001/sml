@@ -94,7 +94,7 @@ function AdProfile() {
                 <div style={{marginTop: '20px', display: 'flex'}}>
                     <div style={{width: '70%'}}>
                         <h1>{profileInfo.title}</h1>
-                        <ImageGallery showPlayButton={false} items={images}/>
+                        {images.length !== 0 ? <ImageGallery showPlayButton={false} items={images}/> : null}
                         <div style={{marginBottom: '20px'}}>
                             {profileInfo.fields.map((field) => {
                                 return (<div style={{
