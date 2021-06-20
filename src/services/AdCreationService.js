@@ -1,8 +1,9 @@
 import Api from "../helpers/Api";
+import baseUrl from "../helpers/BaseUrl";
 
 function AdCreationService() {
     function getCategories(success, error) {
-        Api().get('/products/categories').then(res => {
+        Api().get(baseUrl + '/products/categories').then(res => {
                 success(res.data);
             },
             err => {
@@ -11,7 +12,7 @@ function AdCreationService() {
     }
 
     function uploadImage(formData, success) {
-        Api().post('/products/picture', formData).then(res => {
+        Api().post(baseUrl + '/products/picture', formData).then(res => {
                 success(res.data);
             },
             err => {
@@ -20,7 +21,7 @@ function AdCreationService() {
     }
 
     function deleteImage(imageId) {
-        Api().get(`/products/image/${imageId}`).then(res => {
+        Api().get(baseUrl + `/products/image/${imageId}`).then(res => {
 
             },
             err => {
@@ -29,7 +30,7 @@ function AdCreationService() {
     }
 
     function createNewAd(ad, success, error) {
-        Api().post('/products', ad).then((response) => {
+        Api().post(baseUrl + '/products', ad).then((response) => {
             success(response.data);
         })
     }

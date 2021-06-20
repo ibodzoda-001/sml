@@ -25,7 +25,8 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test"
+    "test": "craco test",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && craco run build"
   },
   "eslintConfig": {
     "extends": [
@@ -45,5 +46,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://sml-backend.herokuapp.com"
+  "proxy": "http://localhost:8000"
 }

@@ -1,9 +1,10 @@
 import Api from '../helpers/Api'
+import baseUrl from "../helpers/BaseUrl";
 
 const AuthenticationService = (function () {
 
     function authenticate(userInfo, success, error) {
-        Api().post('/users/login', userInfo).then(res => {
+        Api().post(baseUrl + '/users/login', userInfo).then(res => {
                 success(res.data);
             },
             err => {

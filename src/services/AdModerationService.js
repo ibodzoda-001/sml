@@ -1,8 +1,9 @@
 import Api from "../helpers/Api";
+import baseUrl from "../helpers/BaseUrl";
 
 function AdModerationService() {
     function getAllAds(success, error) {
-        Api().get('/products/admin').then((response) => {
+        Api().get(baseUrl + '/products/admin').then((response) => {
             success(response.data.products);
         })
     }
