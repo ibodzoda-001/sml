@@ -104,31 +104,31 @@ function AdProfile() {
                                     display: 'inline-block',
                                     backgroundColor: 'white'
                                 }}>
-                                    <b style={{color: '#FF8C00',}}>{field.label}:</b> {field.value}
+                                    <b style={{color: '#FF8C00'}}>{field.label}:</b> {field.value}
                                 </div>)
                             })}
                         </div>
-                        <p style={{fontSize: '18px'}}>
+                        <p style={{fontSize: '17px'}}>
                             {profileInfo.description}
                         </p>
                     </div>
                     <div style={{width: '30%', marginLeft: '25px'}}>
                         <div>
-                            <h2 className="adProfilePrice">
-                                <DollarOutlined/>&nbsp;&nbsp;
-                                {profileInfo.price} сом. {profileInfo.bargain ? 'Торг.' : ''}
-                            </h2>
+                            <h4 style={{fontSize: '23px', color: 'dimgray'}}>{profileInfo.price} TJS{profileInfo.bargain ? '. Торг.' : ''}</h4>
+                        </div>
+                        <div>
+                            <div style={{border: 'solid whitesmoke 2px', padding: '15px', marginBottom: '15px'}}>
+                                <h2 style={{marginBottom: '0px'}}>
+                                    <UserOutlined/>&nbsp;&nbsp;
+                                    {profileInfo.username}<br/>
+                                </h2>
+                                <span>На сайте с октября 2020 г.</span>
+                            </div>
                         </div>
                         <div>
                             <h2 className="adProfilePhone">
                                 <PhoneOutlined/>&nbsp;&nbsp;
                                 +992 {profileInfo.phoneNumber}
-                            </h2>
-                        </div>
-                        <div style={{marginTop: '20px', marginLeft: '15px'}}>
-                            <h2>
-                                <UserOutlined/>&nbsp;&nbsp;
-                                {profileInfo.username}
                             </h2>
                         </div>
                     </div>

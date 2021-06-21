@@ -9,7 +9,7 @@ function AdProfileService() {
     }
 
     function productModeration({productId, status}, success, error) {
-        Api().patch(baseUrl + '/products/admin/product', {id: productId, value: status}).then(
+        Api().put(baseUrl + '/products/admin/product', {id: productId, value: status}).then(
             (response) => {
                 success(response.data);
             })

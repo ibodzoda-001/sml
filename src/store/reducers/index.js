@@ -1,8 +1,10 @@
 import {combineReducers} from "redux";
 import userCredentialsReducer from "./UserCredentials";
+import adsListTypeReducer from "./AdsListType";
 
 const allReducers = combineReducers({
-    userCredentials: userCredentialsReducer,
+    adsListType: adsListTypeReducer,
+    userCredentials: userCredentialsReducer
 })
 
 export default allReducers

@@ -7,16 +7,19 @@ import {BrowserRouter} from "react-router-dom";
 import {createStore, applyMiddleware, compose} from 'redux'
 import allReducers from "./store/reducers";
 import {Provider} from 'react-redux'
-import axios from "axios";
+import {ConfigProvider} from 'antd';
+import ruRU from 'antd/lib/locale/ru_RU';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(allReducers, composeEnhancers(applyMiddleware()))
 
 ReactDOM.render(
     <Provider store={store}>
-        <React.StrictMode >
+        <React.StrictMode>
             <BrowserRouter>
-                <App />
+                <ConfigProvider locale={ruRU}>
+                    <App/>
+                </ConfigProvider>
             </BrowserRouter>
         </React.StrictMode>
     </Provider>,
