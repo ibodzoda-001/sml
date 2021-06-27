@@ -2,6 +2,7 @@ import {Card, Divider, Image, List} from "antd";
 import React from "react";
 import {useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
+import CurrentCategoryRoute from "./CurrentCategoryRoute";
 
 const {Meta} = Card;
 
@@ -10,6 +11,7 @@ function Lists({ads, listType, purpose}) {
 
     return (
         <>
+            <CurrentCategoryRoute/>
             {
                 listType === 'list'
                     ? <List
@@ -61,6 +63,7 @@ function Lists({ads, listType, purpose}) {
                                 onClick={() => {
                                     history.push(`/ad/${purpose}/${ad.id}`);
                                 }}
+                                key={adIndex}
                                 className="card-shadow"
                                 style={{
                                     display: 'inline-block',

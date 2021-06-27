@@ -3,7 +3,7 @@ import {Input} from 'antd';
 import AdsList from "../AdsList";
 import MainPageService from "../../services/MainPageService";
 import {useHistory, useLocation} from "react-router-dom";
-import CurrentCategoryRoute from "./CurrentCategoryRoute";
+import CurrentCategoryRoute from "../AdsList/CurrentCategoryRoute";
 import Categories from "./Categories";
 
 const {Search} = Input;
@@ -58,7 +58,6 @@ function Main() {
                 getAllProducts(searchText);
             }} style={{width: '60vw', marginBottom: '15px'}}/>
             <Categories/>
-            <CurrentCategoryRoute/>
             <AdsList listOfAds={ads} listLoading={listLoading} purpose={'view'}/>
         </>
     )
