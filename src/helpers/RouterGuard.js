@@ -31,7 +31,7 @@ function AdministratorRoutes() {
             <Route component={Main} path="/main"/>
             <Route exact component={AdsModeration} path="/ad-moderation"/>
             <Route component={AdCreation} path="/new-ad"/>
-            <Route component={AdProfile} path="/ad/:adId"/>
+            <Route component={AdProfile} path="/ad/:purpose/:adId"/>
             <Redirect to='/main'/>
         </Switch>
     )
@@ -42,7 +42,7 @@ function UserRoutes() {
         <Switch>
             <Route component={Main} path="/main"/>
             <Route component={AdCreation} path="/new-ad"/>
-            <Route component={AdProfile} path="/ad/:adId"/>
+            <Route component={AdProfile} path="/ad/:purpose/:adId"/>
             <Redirect to='/main'/>
         </Switch>
     )

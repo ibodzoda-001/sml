@@ -6,12 +6,16 @@ import adProfileService from '../services/adProfileService'
 import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
 import {Spin} from "antd";
+import {useSelector} from "react-redux";
 
 function AdProfile() {
 
     const history = useHistory();
 
-    const {adId} = useParams();
+    const {adId, purpose} = useParams();
+    const userCredentials = useSelector(((state) => {
+        return state.userCredentials;
+    }));
 
     const [buttonLoading, setButtonLoading] = useState(false);
     const [profileInfo, setProfileInfo] = useState(null);
@@ -55,42 +59,46 @@ function AdProfile() {
     return (
         profileInfo !== null
             ? <>
-                <div>
-                    <Popconfirm
-                        title="Вы действительно хотите принять?"
-                        onConfirm={() => {
-                            productModeration(2);
-                        }}
-                        okText="Да"
-                        cancelText="Нет"
-                    >
-                        <Button loading={buttonLoading}
-                                size="large"
-                                icon={<CheckOutlined/>}
-                                type="primary">
-                            Принять
-                        </Button>
-                    </Popconfirm>
+                {
+                    purpose === 'moderation' && userCredentials.userType === 'admin'
+                        ? <div>
+                            <Popconfirm
+                                title="Вы действительно хотите принять?"
+                                onConfirm={() => {
+                                    productModeration(2);
+                                }}
+                                okText="Да"
+                                cancelText="Нет"
+                            >
+                                <Button loading={buttonLoading}
+                                        size="large"
+                                        icon={<CheckOutlined/>}
+                                        type="primary">
+                                    Принять
+                                </Button>
+                            </Popconfirm>
 
-                    <Popconfirm
-                        title="Вы действительно хотите отклонить?"
-                        onConfirm={() => {
-                            productModeration(3);
-                        }}
-                        okText="Да"
-                        cancelText="Нет"
-                    >
-                        <Button loading={buttonLoading}
-                                style={{marginLeft: '10px'}}
-                                size="large"
-                                type="primary"
-                                icon={<CloseOutlined/>}
-                                danger>
-                            Отклонить
-                        </Button>
-                    </Popconfirm>
+                            <Popconfirm
+                                title="Вы действительно хотите отклонить?"
+                                onConfirm={() => {
+                                    productModeration(3);
+                                }}
+                                okText="Да"
+                                cancelText="Нет"
+                            >
+                                <Button loading={buttonLoading}
+                                        style={{marginLeft: '10px'}}
+                                        size="large"
+                                        type="primary"
+                                        icon={<CloseOutlined/>}
+                                        danger>
+                                    Отклонить
+                                </Button>
+                            </Popconfirm>
 
-                </div>
+                        </div>
+                        : null
+                }
                 <div style={{marginTop: '20px', display: 'flex'}}>
                     <div style={{width: '70%'}}>
                         <h1>{profileInfo.title}</h1>
@@ -114,7 +122,10 @@ function AdProfile() {
                     </div>
                     <div style={{width: '30%', marginLeft: '25px'}}>
                         <div>
-                            <h4 style={{fontSize: '23px', color: 'dimgray'}}>{profileInfo.price} TJS{profileInfo.bargain ? '. Торг.' : ''}</h4>
+                            <h4 style={{
+                                fontSize: '23px',
+                                color: 'dimgray'
+                            }}>{profileInfo.price} TJS{profileInfo.bargain ? '. Торг.' : ''}</h4>
                         </div>
                         <div>
                             <div style={{border: 'solid whitesmoke 2px', padding: '15px', marginBottom: '15px'}}>

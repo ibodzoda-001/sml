@@ -13,12 +13,15 @@ function AdsModeration() {
             ads.forEach((ad) => {
                 listOfData.push({
                     id: ad.productID,
-                    title: (<div style={{display: 'flex'}}>
+                    header: (<div style={{display: 'flex'}}>
                         <h3>{ad.title}</h3>
                         <div style={{marginLeft: 'auto'}}>
-                            <h4 style={{fontSize: '23px', color: 'dimgray'}}>{ad.price} TJS{ad.bargain ? '. Торг.' : ''}</h4>
+                            <span style={{fontSize: '23px', color: 'dimgray'}}>{ad.price} TJS{ad.bargain ? '. Торг.' : ''}</span>
                         </div>
                     </div>),
+                    title: ad.title,
+                    price: ad.price,
+                    bargain: ad.bargain,
                     content: ad.description,
                     pictures: ad.pictures,
                 });
@@ -33,7 +36,7 @@ function AdsModeration() {
     }, []);
 
     return (
-        <AdsList listOfAds={listOfAds} listLoading={listLoading}/>
+        <AdsList listOfAds={listOfAds} listLoading={listLoading} purpose={'moderation'}/>
     )
 }
 

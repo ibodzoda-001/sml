@@ -11,6 +11,8 @@ import {
 import logo from '../logo.png'
 import {useHistory} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
+import Api from "../helpers/Api";
+import baseUrl from "../helpers/BaseUrl";
 
 function Header() {
     const history = useHistory();
@@ -38,6 +40,13 @@ function Header() {
                                 }
                             }}>Подать объявление</Button>
 
+                    {/*<Button style={{marginRight: '15px'}} size={'middle'} type="primary"
+                            onClick={() => {
+                                Api().delete(baseUrl + '/products/all').then((response) => {
+                                    console.log(response.data
+                                    )
+                                })
+                            }}>Удалить</Button>*/}
                     {
                         userCredentials !== null
                             ? <Dropdown placement="bottomRight" overlay={
@@ -102,8 +111,6 @@ function Header() {
                                 </Button>
                             </Dropdown>
                     }
-
-
                 </div>
             </div>
         </div>
