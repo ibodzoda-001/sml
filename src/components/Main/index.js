@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react'
-import {Input} from 'antd';
+import {Input, Collapse, InputNumber} from 'antd';
 import AdsList from "../AdsList";
 import MainPageService from "../../services/MainPageService";
 import {useHistory, useLocation} from "react-router-dom";
-import CurrentCategoryRoute from "../AdsList/CurrentCategoryRoute";
 import Categories from "./Categories";
+import {DownOutlined, RightOutlined} from '@ant-design/icons';
 
 const {Search} = Input;
+const {Panel} = Collapse;
 
 function Main() {
     const history = useHistory();
@@ -53,11 +54,32 @@ function Main() {
 
     return (
         <>
-            <Search size={'large'} defaultValue={searchField} placeholder="Поиск по сайту" onSearch={(searchText) => {
-                setSearchField(searchText);
-                getAllProducts(searchText);
-            }} style={{width: '60vw', marginBottom: '15px'}}/>
+            <div style={{width: '60vw'}}>
+                <Search size={'large'} defaultValue={searchField} placeholder="Поиск по сайту"
+                        onSearch={(searchText) => {
+                            setSearchField(searchText);
+                            getAllProducts(searchText);
+                        }}/>
+                <Collapse expandIconPosition="right" ghost>
+                    <Panel header="Расширенный поиск" key="1">
+                        <div style={{display: 'flex'}}>
+                            <label>
+                                <Input type="number" style={{width: 'fit-content'}} min={0}
+                                       placeholder="Минимальная цена"
+                                       suffix="TJS"/>
+                            </label>
+                            <label style={{marginLeft: '15px'}}>
+                                <Input type="number" style={{width: 'fit-content'}} min={0}
+                                       placeholder="Максимальная цена"
+                                       suffix="TJS"/>
+                            </label>
+                        </div>
+                    </Panel>
+                </Collapse>
+            </div>
+
             <Categories/>
+
             <AdsList listOfAds={ads} listLoading={listLoading} purpose={'view'}/>
         </>
     )

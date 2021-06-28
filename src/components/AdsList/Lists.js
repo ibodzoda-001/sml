@@ -1,6 +1,5 @@
 import {Card, Divider, Image, List} from "antd";
 import React from "react";
-import {useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
 import CurrentCategoryRoute from "./CurrentCategoryRoute";
 
@@ -11,7 +10,9 @@ function Lists({ads, listType, purpose}) {
 
     return (
         <>
-            <CurrentCategoryRoute/>
+            {
+                purpose === 'view' ? <CurrentCategoryRoute/> : null
+            }
             {
                 listType === 'list'
                     ? <List

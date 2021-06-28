@@ -1,12 +1,7 @@
-let adsListType = localStorage.getItem('adsListType');
-adsListType = adsListType === null ? 'gallery' : adsListType;
-
-const categoriesReducer = (state = adsListType, action) => {
+const categoriesReducer = (state = {}, action) => {
     switch (action.type) {
-        case 'SET_GALLERY':
-            return 'gallery'
-        case 'SET_LIST':
-            return 'list'
+        case 'SET_CATEGORIES':
+            return action.data
         default:
             return state
     }
