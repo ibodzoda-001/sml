@@ -12,7 +12,7 @@ function CurrentCategoryRoute() {
     })
 
     return (
-        <Breadcrumb style={{marginBottom: '5px', marginTop: '15px'}}>
+        <Breadcrumb>
             <Breadcrumb.Item onClick={() => {
                 dispatch({type: 'SET_ROUTES', data: null});
                 dispatch({type: 'SET_CURRENT_CATEGORIES', data: mapOfCategories['null']});

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Input, Collapse, InputNumber} from 'antd';
+import {Input, Collapse, Button} from 'antd';
 import AdsList from "../AdsList";
 import MainPageService from "../../services/MainPageService";
 import {useHistory, useLocation} from "react-router-dom";
@@ -54,8 +54,8 @@ function Main() {
 
     return (
         <>
-            <div style={{width: '60vw'}}>
-                <Search size={'large'} defaultValue={searchField} placeholder="Поиск по сайту"
+            <div style={{width: '70%'}}>
+                <Search size={'large'} enterButton={<Button type="primary">Найти</Button>} defaultValue={searchField} placeholder="Поиск по сайту"
                         onSearch={(searchText) => {
                             setSearchField(searchText);
                             getAllProducts(searchText);
