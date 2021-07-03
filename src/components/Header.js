@@ -74,6 +74,7 @@ function Header() {
                                                 onOk: function () {
                                                     localStorage.removeItem('credentials');
                                                     dispatch({type: 'REMOVE_USER_CREDENTIALS'});
+                                                    history.push('/main');
                                                 }
                                             });
                                         }}>

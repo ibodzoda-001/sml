@@ -8,7 +8,7 @@ import {useHistory} from "react-router-dom";
 
 const {Meta} = Card;
 
-function AdsList({listOfAds, listLoading, purpose, loadMoreClicked}) {
+function AdsList({listOfAds, listLoading, loadMoreButtonLoading, purpose, loadMoreClicked}) {
     const history = useHistory();
     const listType = useSelector((state) => {
         return state.adsListType;
@@ -82,7 +82,7 @@ function AdsList({listOfAds, listLoading, purpose, loadMoreClicked}) {
                                                     className="card-shadow"
                                                     style={{
                                                         display: 'inline-block',
-                                                        width: 'calc(25% - 15px)',
+                                                        width: 'calc((100% - 45px) / 4)',
                                                         marginTop: '15px',
                                                         marginLeft: adIndex % 4 !== 0 ? '15px' : '0px',
                                                         verticalAlign: 'top'
@@ -117,8 +117,8 @@ function AdsList({listOfAds, listLoading, purpose, loadMoreClicked}) {
                                             })}
                                         </div>
                                 }
-                                <div style={{marginTop: '15px', textAlign: 'center'}}>
-                                    <Button onClick={() => {
+                                <div style={{marginTop: '20px', textAlign: 'center'}}>
+                                    <Button loading={loadMoreButtonLoading} onClick={() => {
                                         loadMoreClicked();
                                     }}>Загрузить еще</Button>
                                 </div>

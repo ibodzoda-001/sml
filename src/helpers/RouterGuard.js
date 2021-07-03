@@ -55,6 +55,7 @@ function UnauthorisedUserRoutes() {
             <Route component={Main} path="/main"/>
             <Route component={UserCreation} path="/user-creation"/>
             <Route component={UserConfirmation} path="/confirmation/:email/:code"/>
+            <Route component={AdProfile} path="/ad/:purpose/:adId"/>
             <Redirect to='/main'/>
         </Switch>
     )

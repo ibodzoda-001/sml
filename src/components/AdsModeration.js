@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import AdModerationService from "../services/AdModerationService";
 import AdsList from "./AdsList";
+import AdsListConverter from "../helpers/AdsListConverter";
 
 function AdsModeration() {
     const [listOfAds, setListOfAds] = useState([]);
@@ -9,24 +10,7 @@ function AdsModeration() {
     function getAllAds() {
         setListLoading(true);
         AdModerationService().getAllAds((ads) => {
-            const listOfData = [];
-            ads.forEach((ad) => {
-                listOfData.push({
-                    id: ad.productID,
-                    header: (<div style={{display: 'flex'}}>
-                        <h3>{ad.title}</h3>
-                        <div style={{marginLeft: 'auto'}}>
-                            <span style={{fontSize: '23px', color: 'dimgray'}}>{ad.price} TJS{ad.bargain ? '. Торг.' : ''}</span>
-                        </div>
-                    </div>),
-                    title: ad.title,
-                    price: ad.price,
-                    bargain: ad.bargain,
-                    content: ad.description,
-                    pictures: ad.pictures,
-                });
-            })
-            setListOfAds(listOfData);
+            setListOfAds(AdsListConverter(ads));
             setListLoading(false);
         })
     }
