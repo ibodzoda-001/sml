@@ -1,14 +1,18 @@
-const searchParamsReducer = (state = {
+const emptySearchParams = {
     category: '',
     subCategory: '',
     searchField: '',
     minPrice: '',
     maxPrice: '',
-    range: 0
-}, action) => {
+    range: 1
+}
+const localStorageParams = JSON.parse(sessionStorage.getItem('searchParams'));
+const searchParamsReducer = (state = localStorageParams === null ? emptySearchParams : localStorageParams, action) => {
     switch (action.type) {
-        case 'SET_PARAMS':
+        case 'SET_PARAMS': {
+            sessionStorage.setItem('searchParams', JSON.stringify(action.data));
             return action.data
+        }
         default:
             return state
     }

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Input, Collapse, Button} from 'antd';
 import AdsList from "../AdsList";
 import MainPageService from "../../services/MainPageService";
-import {useHistory, useLocation} from "react-router-dom";
+import {location, useHistory, useLocation} from "react-router-dom";
 import Categories from "./Categories";
 import {useDispatch, useSelector} from "react-redux";
 import {SearchOutlined} from "@ant-design/icons";
@@ -14,8 +14,10 @@ const {Panel} = Collapse;
 function Main() {
     const history = useHistory();
     const dispatch = useDispatch();
+    const location = useLocation();
 
     const [loadMoreButtonLoading, setLoadMoreButtonLoading] = useState(false);
+    const [isLastPage, setLastPage] = useState(false);
 
     const searchParams = useSelector((state) => {
         return state.searchParams;
@@ -30,18 +32,35 @@ function Main() {
     })
 
     function getAllAds(calledFrom) {
-        history.push(`/main?category=${searchParams.category}&subCategory=${searchParams.subCategory}&searchField=${searchParams.searchField}&minPrice=${searchParams.minPrice}&maxPrice=${searchParams.maxPrice}&range=${searchParams.range}`);
+        if (calledFrom !== 'useEffect') {
+            history.push(`/main?category=${searchParams.category}&subCategory=${searchParams.subCategory}&searchField=${searchParams.searchField}&minPrice=${searchParams.minPrice}&maxPrice=${searchParams.maxPrice}&range=${searchParams.range}`);
+        }
         if (calledFrom !== 'loadMoreButton') {
             dispatch({type: 'SET_LOADING'});
         }
         MainPageService().getAllAds(searchParams, (data) => {
+            setLastPage(data.products.length < 10);
             setLoadMoreButtonLoading(false);
             dispatch({type: 'SET_UNLOADING'});
             dispatch({type: 'SET_ADS', data: [...mainAds, ...AdsListConverter(data.products)]});
+        }, calledFrom !== 'loadMoreButton', (error) => {
         })
     }
 
     useEffect(() => {
+        const inParams = {
+            category: new URLSearchParams(location.search).get('category') === null ? '' : new URLSearchParams(location.search).get('category'),
+            subCategory: new URLSearchParams(location.search).get('subCategory') === null ? '' : new URLSearchParams(location.search).get('subCategory'),
+            searchField: new URLSearchParams(location.search).get('searchField') === null ? '' : new URLSearchParams(location.search).get('searchField'),
+            minPrice: new URLSearchParams(location.search).get('minPrice') === null ? '' : new URLSearchParams(location.search).get('minPrice'),
+            maxPrice: new URLSearchParams(location.search).get('maxPrice') === null ? '' : new URLSearchParams(location.search).get('maxPrice'),
+            range: new URLSearchParams(location.search).get('range') === null ? 0 : new URLSearchParams(location.search).get('range')
+        }
+        dispatch({
+            type: "SET_PARAMS", data: inParams
+        });
+        console.log(inParams);
+        history.push(`/main?category=${inParams.category}&subCategory=${inParams.subCategory}&searchField=${inParams.searchField}&minPrice=${inParams.minPrice}&maxPrice=${inParams.maxPrice}&range=${inParams.range}`);
         getAllAds('useEffect');
     }, [])
 
@@ -111,10 +130,10 @@ function Main() {
                      loadMoreButtonLoading={loadMoreButtonLoading}
                      purpose={'view'} loadMoreClicked={() => {
                 setLoadMoreButtonLoading(true);
-                searchParams.range += 1;
+                searchParams.range = Number(searchParams.range) + 1;
                 dispatch({type: 'SET_PARAMS', data: searchParams});
                 getAllAds('loadMoreButton');
-            }}/>
+            }} isLastPage={isLastPage}/>
         </>
     )
 }
