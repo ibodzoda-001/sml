@@ -31,14 +31,14 @@ function Main() {
         return state.mainListLoading;
     })
 
-    function getAllAds(calledFrom) {
+    function getAllAds(calledFrom, inParams) {
         if (calledFrom !== 'useEffect') {
             history.push(`/main?category=${searchParams.category}&subCategory=${searchParams.subCategory}&searchField=${searchParams.searchField}&minPrice=${searchParams.minPrice}&maxPrice=${searchParams.maxPrice}&range=${searchParams.range}`);
         }
         if (calledFrom !== 'loadMoreButton') {
             dispatch({type: 'SET_LOADING'});
         }
-        MainPageService().getAllAds(searchParams, (data) => {
+        MainPageService().getAllAds(calledFrom === 'useEffect' ? inParams : searchParams, (data) => {
             setLastPage(data.products.length < 10);
             setLoadMoreButtonLoading(false);
             dispatch({type: 'SET_UNLOADING'});
@@ -56,12 +56,12 @@ function Main() {
             maxPrice: new URLSearchParams(location.search).get('maxPrice') === null ? '' : new URLSearchParams(location.search).get('maxPrice'),
             range: new URLSearchParams(location.search).get('range') === null ? 0 : new URLSearchParams(location.search).get('range')
         }
+        console.log('main useEffect');
         dispatch({
             type: "SET_PARAMS", data: inParams
         });
-        console.log(inParams);
         history.push(`/main?category=${inParams.category}&subCategory=${inParams.subCategory}&searchField=${inParams.searchField}&minPrice=${inParams.minPrice}&maxPrice=${inParams.maxPrice}&range=${inParams.range}`);
-        getAllAds('useEffect');
+        getAllAds('useEffect', inParams);
     }, [])
 
     return (
