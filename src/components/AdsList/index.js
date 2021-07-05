@@ -8,11 +8,15 @@ import {useHistory} from "react-router-dom";
 
 const {Meta} = Card;
 
-function AdsList({listOfAds, listLoading, loadMoreButtonLoading, purpose, loadMoreClicked, isLastPage}) {
+function AdsList({listOfAds, listLoading, loadMoreButtonLoading, purpose, loadMoreClicked}) {
     const history = useHistory();
     const listType = useSelector((state) => {
         return state.adsListType;
     })
+    const isLoadMoreButtonVisible = useSelector((state) => {
+        return state.isLoadMoreButtonVisible;
+    })
+
     return (
         <div>
             <div style={{width: '100%', display: 'flex'}}>
@@ -119,7 +123,7 @@ function AdsList({listOfAds, listLoading, loadMoreButtonLoading, purpose, loadMo
                                 }
                                 <div style={{marginTop: '20px', textAlign: 'center'}}>
                                     {
-                                        isLastPage === false
+                                        isLoadMoreButtonVisible
                                             ? <Button loading={loadMoreButtonLoading} onClick={() => {
                                                 loadMoreClicked();
                                             }}>Загрузить еще</Button>

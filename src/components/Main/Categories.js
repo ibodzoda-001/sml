@@ -68,6 +68,8 @@ function Categories() {
             {
                 currentCategories && currentCategories.map((category, categoryIndex) => {
                     return <Button onClick={() => {
+                        searchParams.range = 0;
+                        dispatch({type: 'SET_LOAD_MORE_BUTTON_VISIBLE'});
                         if (categoriesRoute === null) {
                             searchParams.category = category.id;
                             dispatch({type: 'SET_PARAMS', data: searchParams})

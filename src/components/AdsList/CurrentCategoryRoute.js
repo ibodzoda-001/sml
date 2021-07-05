@@ -32,6 +32,8 @@ function CurrentCategoryRoute() {
             <Breadcrumb.Item onClick={() => {
                 dispatch({type: 'SET_ROUTES', data: null});
                 dispatch({type: 'SET_CURRENT_CATEGORIES', data: mapOfCategories['null']});
+                dispatch({type: 'SET_LOAD_MORE_BUTTON_VISIBLE'});
+                searchParams.range = 0;
                 searchParams.category = '';
                 searchParams.subCategory = '';
                 dispatch({type: 'SET_PARAMS', data: searchParams});
@@ -42,6 +44,8 @@ function CurrentCategoryRoute() {
             {
                 currentRoute !== null ? currentRoute.map((route, routeIndex) => {
                     return <Breadcrumb.Item onClick={() => {
+                        searchParams.range = 0;
+                        dispatch({type: 'SET_LOAD_MORE_BUTTON_VISIBLE'});
                         if (currentRoute.length === 2) {
                             searchParams.subCategory = '';
                         } else if (currentRoute.length > 2) {

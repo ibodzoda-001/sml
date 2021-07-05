@@ -39,12 +39,18 @@ function Main() {
             dispatch({type: 'SET_LOADING'});
         }
         MainPageService().getAllAds(calledFrom === 'useEffect' ? inParams : searchParams, (data) => {
-            setLastPage(data.products.length < 10);
             setLoadMoreButtonLoading(false);
+            if (data.products.length < 10) {
+                console.log(data.products.length < 10);
+                dispatch({type: 'SET_LOAD_MORE_BUTTON_INVISIBLE'})
+            }
+
             dispatch({type: 'SET_UNLOADING'});
-            dispatch({type: 'SET_ADS', data: [...mainAds, ...AdsListConverter(data.products)]});
-        }, calledFrom !== 'loadMoreButton', (error) => {
-        })
+            dispatch({
+                type: 'SET_ADS',
+                data: calledFrom !== 'loadMoreButton' ? AdsListConverter(data.products) : [...mainAds, ...AdsListConverter(data.products)]
+            });
+        }, calledFrom !== 'loadMoreButton')
     }
 
     useEffect(() => {
@@ -132,7 +138,7 @@ function Main() {
                 searchParams.range = Number(searchParams.range) + 1;
                 dispatch({type: 'SET_PARAMS', data: searchParams});
                 getAllAds('loadMoreButton');
-            }} isLastPage={isLastPage}/>
+            }}/>
         </>
     )
 }
