@@ -56,7 +56,6 @@ function Main() {
             maxPrice: new URLSearchParams(location.search).get('maxPrice') === null ? '' : new URLSearchParams(location.search).get('maxPrice'),
             range: new URLSearchParams(location.search).get('range') === null ? 0 : new URLSearchParams(location.search).get('range')
         }
-        console.log('main useEffect');
         dispatch({
             type: "SET_PARAMS", data: inParams
         });

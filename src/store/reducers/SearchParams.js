@@ -1,4 +1,3 @@
-console.log('in param reducer');
 const searchParamsReducer = (state = {
     category: '',
     subCategory: '',
