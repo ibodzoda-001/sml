@@ -41,7 +41,6 @@ function Main() {
         MainPageService().getAllAds(calledFrom === 'useEffect' ? inParams : searchParams, (data) => {
             setLoadMoreButtonLoading(false);
             if (data.products.length < 10) {
-                console.log(data.products.length < 10);
                 dispatch({type: 'SET_LOAD_MORE_BUTTON_INVISIBLE'})
             }
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Result, Button, Spin} from "antd";
-import {CheckCircleOutlined, ArrowRightOutlined} from '@ant-design/icons';
-import {useHistory, useLocation, useParams} from "react-router-dom";
+import {ArrowRightOutlined} from '@ant-design/icons';
+import {useHistory, useParams} from "react-router-dom";
 import AuthorizationService from "../services/AuthorizationService";
 
 function UserConfirmation() {

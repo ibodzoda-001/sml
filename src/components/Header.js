@@ -11,8 +11,6 @@ import {
 import logo from '../logo.png'
 import {useHistory} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
-import Api from "../helpers/Api";
-import baseUrl from "../helpers/BaseUrl";
 
 function Header() {
     const history = useHistory();

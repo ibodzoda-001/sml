@@ -15,21 +15,23 @@ function AdCreation() {
     const [mapOfCategories, setMapOfCategories] = useState(new Map());
     const [mapOfFields, setMapOfFields] = useState(new Map());
 
-
     const [selectedCategoryInfo, setSelectedCategoryInfo] = useState(null);
-    let [adTitle, setAdTitle] = useState('');
-    let [adBargain, setAdBargain] = useState(false);
-    let [adPrice, setAdPrice] = useState(null);
-    let [adPhoneNumber, setAdPhoneNumber] = useState('');
-    let [adDescription, setAdDescription] = useState('');
-    let [buttonLoading, setButtonLoading] = useState(false);
-
+    const [adTitle, setAdTitle] = useState('');
+    const [adBargain, setAdBargain] = useState(false);
+    const [adPrice, setAdPrice] = useState(null);
+    const [adPhoneNumber, setAdPhoneNumber] = useState('');
+    const [adDescription, setAdDescription] = useState('');
+    const [buttonLoading, setButtonLoading] = useState(false);
+    const [isCreateButtonDisabled, setCreateButtonDisabled] = useState(false);
 
     const [fileList, setFileList] = useState([]);
-    const [uploadedFilesIds, setUploadedFileIds] = useState([]);
-    const previewVisible = false;
-    const previewImage = '';
-    const previewTitle = '';
+    let [uploadedFilesIds, setUploadedFilesIds] = useState([]);
+
+    const [preview, setPreview] = useState({
+        previewVisible: false,
+        previewImage: '',
+        previewTitle: ''
+    });
 
     function createNewAd() {
         setButtonLoading(true);
@@ -66,21 +68,54 @@ function AdCreation() {
         })
     }
 
-    function handleImageUpload(files) {
-        const formData = new FormData();
-        formData.append(
-            "picture",
-            files.file,
-            files.file.name
-        );
-        const fileListDuplicate = _.cloneDeep(files.fileList);
+    function getBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
 
-        fileListDuplicate[fileListDuplicate.length - 1].status = 'uploading';
-        setFileList(fileListDuplicate);
-        AdCreationService().uploadImage(formData, response => {
-            setUploadedFileIds([response['imageID'], ...uploadedFilesIds]);
+    const handlePreview = async file => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
+        }
+        setPreview({
+            previewImage: file.url || file.preview,
+            previewVisible: true,
+            previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+        });
+    };
+
+
+    function handleImageUpload(files) {
+        if (files.file.status && files.file.status === 'removed') {
+            const filesIds = [];
+            files.fileList.forEach((file) => {
+                filesIds.push(file.uid);
+            })
+            setUploadedFilesIds(filesIds);
             setFileList(files.fileList);
-        })
+        } else {
+            setCreateButtonDisabled(true);
+            const formData = new FormData();
+            formData.append(
+                "picture",
+                files.file,
+                files.file.name
+            );
+            const fileListDuplicate = _.cloneDeep(files.fileList);
+
+            fileListDuplicate[fileListDuplicate.length - 1].status = 'uploading';
+            setFileList(fileListDuplicate);
+            AdCreationService().uploadImage(formData, response => {
+                setUploadedFilesIds([...uploadedFilesIds, response['imageID']]);
+                setCreateButtonDisabled(false);
+                files.fileList[files.fileList.length - 1]['uid'] = response['imageID'];
+                setFileList(files.fileList);
+            })
+        }
 
     }
 
@@ -149,7 +184,8 @@ function AdCreation() {
                         }} style={{marginLeft: '10px', marginTop: '33px'}}>Торг.</Checkbox>
                     </div>
 
-                    <Form.Item name="title" label="Заголовок" rules={[{required: true, message: 'Введите заголовок.'}]}>
+                    <Form.Item name="title" label="Заголовок"
+                               rules={[{required: true, message: 'Введите заголовок.'}]}>
                         <Input placeholder="Введите заголовок" onChange={(event) => {
                             setAdTitle(event.target.value);
                         }}/>
@@ -173,6 +209,7 @@ function AdCreation() {
                             listType="picture-card"
                             fileList={fileList}
                             onChange={handleImageUpload}
+                            onPreview={handlePreview}
                             beforeUpload={() => false}>
                             {fileList.length >= 8 ? null : (
                                 <div>
@@ -182,19 +219,25 @@ function AdCreation() {
                             )}
                         </Upload>
                         <Modal
-                            visible={previewVisible}
-                            title={previewTitle}
+                            visible={preview.previewVisible}
+                            title={preview.previewTitle}
                             footer={null}
                             onCancel={() => {
+                                setPreview({
+                                    previewVisible: false,
+                                    previewImage: '',
+                                    previewTitle: ''
+                                });
                             }}
                         >
-                            <img alt="example" style={{width: '100%'}} src={previewImage}/>
+                            <img alt="example" style={{width: '100%'}} src={preview.previewImage}/>
                         </Modal>
                     </>
 
                     <Form.Item style={{textAlign: 'end'}}>
                         <div>
-                            <Button type="primary" loading={buttonLoading} htmlType="submit">
+                            <Button type="primary" disabled={isCreateButtonDisabled} loading={buttonLoading}
+                                    htmlType="submit">
                                 Создать
                             </Button>
                         </div>

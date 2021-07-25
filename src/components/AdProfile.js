@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 import {Button, message, Popconfirm} from 'antd'
-import {PhoneOutlined, CloseOutlined, CheckOutlined, DollarOutlined, UserOutlined} from '@ant-design/icons';
+import {PhoneOutlined, CloseOutlined, CheckOutlined, UserOutlined} from '@ant-design/icons';
 import adProfileService from '../services/adProfileService'
 import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
